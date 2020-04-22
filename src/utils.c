@@ -1,0 +1,69 @@
+#include "../include/utils.h"
+
+
+void get_interface_ip(uint8_t* iface_address)
+{
+    pcap_if_t *devices;
+    char* addr = NULL;
+    int i = 0;
+
+    if (pcap_findalldevs(&devices, error_buffer) != 0)
+    {
+      //handle error
+      exit(1);
+    }
+
+    for(pcap_if_t* d = devices; d != NULL; d = d->next)
+    {
+       if(!strcmp(d->name, nic))
+       {
+           for(pcap_addr_t *a=d->addresses; a!=NULL; a=a->next)
+           {
+               if(a->addr->sa_family == AF_INET)
+                   addr = inet_ntoa(((struct sockaddr_in*)a->addr)->sin_addr);
+           }
+       }
+    }
+
+   char* octet = strtok (addr, ".");
+
+   while (octet)
+   {
+      iface_address[i] = atoi(octet);
+      octet = strtok (NULL, ".");
+      i++;
+   }
+}
+
+//
+//getting interface mac address from /sys/class/net/iface_nam/address file
+//
+void get_mac_address(char* mac)
+{
+    char tmp_mac_buffer[17];
+
+    char file_name[255];
+    strcpy (file_name, "/sys/class/net/");
+    strcat (file_name, nic);
+    strcat (file_name, "/address");
+    FILE* mac_file = fopen(file_name, "r");
+
+    //implement the proper check
+    /*if (!mac_file)
+      printf("%s\n", "no file!");
+    else
+      printf("%s\n", "si file!");*/
+    fgets (mac, 18, mac_file);
+}
+
+
+
+bool compare_addresses (uint8_t* first_address, uint8_t* second_address)
+{
+  for (size_t i = 0; i < 4; i++)
+  {
+      if (first_address[i] != second_address[i])
+        return false;
+  }
+  return true;
+}
