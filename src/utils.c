@@ -41,6 +41,7 @@ void get_interface_ip(uint8_t* iface_address)
 void get_mac_address(char* mac)
 {
     char tmp_mac_buffer[17];
+    size_t i = 0;
 
     char file_name[255];
     strcpy (file_name, "/sys/class/net/");
@@ -53,7 +54,17 @@ void get_mac_address(char* mac)
       printf("%s\n", "no file!");
     else
       printf("%s\n", "si file!");*/
-    fgets (mac, 18, mac_file);
+    fgets (tmp_mac_buffer, 18, mac_file);
+
+    char* octet = strtok (tmp_mac_buffer, ":");
+
+    while (octet)
+    {
+        mac[i] = (unsigned char)strtol(octet, NULL, 16);
+        octet = strtok (NULL, ":");
+        i++;
+    }
+
 }
 
 

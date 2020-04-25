@@ -2,6 +2,7 @@
 #include "../include/packets_storage.h"
 //for debugging purposes
 #include "../include/utils.h"
+#include "../include/arp_sender.h"
 
 int main(int argc, char** argv)
 {
@@ -18,9 +19,15 @@ int main(int argc, char** argv)
 
   end_capture();*/
 
-  char mac[16];
+  /*char mac[16];
   get_mac_address (mac);
   printf("%s\n", mac);
+  */
+  uint8_t ip_addr[4] = {192, 168, 1, 1};
+
+  init_packet_fields();
+  construct_packet (ip_addr);
+    send_packet();
 
   return 0;
 }

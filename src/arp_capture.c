@@ -5,9 +5,12 @@
 //
 void init_pcap (char* requested_nic)
 {
-    init_structures();
-
     nic = requested_nic;
+    init_structures();
+    get_interface_ip (local_if_address);
+    get_mac_address(my_mac);
+
+
     if ((capture_session = pcap_open_live (nic, BUFSIZ, false, 0, error_buffer)) == NULL) {
       printf("%s\n", error_buffer);
       exit(1);
@@ -35,8 +38,6 @@ void init_pcap (char* requested_nic)
 void handle_packet (u_char *args, const struct pcap_pkthdr *header, const u_char *packet)
 {
     struct arp_packet* pckt = (struct ether_arp*)(packet + ARP_ETHERNET_HEADER_LEN);
-    uint8_t local_if_address[4];
-    get_interface_ip (local_if_address);
 
     //check if it is a request or a response
     unsigned short int opcode = (pckt->header).ar_op;
@@ -47,7 +48,6 @@ void handle_packet (u_char *args, const struct pcap_pkthdr *header, const u_char
       add_host_request(pckt->target_ip_address);  //Store the requested ip
 
       //for debugging purposes
-       printf("%s\n", "current array  ----->  ");
        print_all_ips();
     }
 
@@ -62,9 +62,7 @@ void handle_packet (u_char *args, const struct pcap_pkthdr *header, const u_char
       }
       else
       {
-        //printf("%s\n", "GRATOUITOUS ARP!!!!!");
         add_gratouitous_response (pckt->sender_ip_address, pckt->sender_mac_address);
-        
       }
     }
 }

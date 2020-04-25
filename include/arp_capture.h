@@ -9,6 +9,9 @@
 #include <string.h>
 
 char* nic;
+uint8_t local_if_address[4];
+char my_mac[6];
+
 char error_buffer [PCAP_ERRBUF_SIZE];
 
 //handler for the capture session
