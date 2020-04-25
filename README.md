@@ -1,1 +1,1 @@
-A software for maliciuos gratouitous ARP Response detection
+A software for maliciuos gratuitous ARP Response detection
