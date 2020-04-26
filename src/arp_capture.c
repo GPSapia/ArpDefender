@@ -12,7 +12,8 @@ void init_pcap (char* requested_nic, char* log_file)
     init_packet_fields();
     init_log_file(log_file);
 
-    if ((capture_session = pcap_open_live (nic, BUFSIZ, false, 0, error_buffer)) == NULL) {
+    if ((capture_session = pcap_open_live (nic, BUFSIZ, false, 0, error_buffer)) == NULL)
+    {
       printf("%s\n", error_buffer);
       exit(1);
     }
@@ -20,17 +21,20 @@ void init_pcap (char* requested_nic, char* log_file)
     bpf_u_int32 netmask;
     bpf_u_int32 net;
 
-    if (pcap_lookupnet (requested_nic, &net, &netmask, error_buffer)) {
+    if (pcap_lookupnet (requested_nic, &net, &netmask, error_buffer))
+    {
       printf("%s\n", error_buffer);
       exit(1);
     }
 
-    if (pcap_compile(capture_session, &arp_filter, "arp", true, netmask) == -1) {
+    if (pcap_compile(capture_session, &arp_filter, "arp", true, netmask) == -1)
+    {
         printf("%s\n", pcap_geterr(capture_session));
         exit(1);
     }
 
-    if (pcap_setfilter(capture_session, &arp_filter) == -1) {
+    if (pcap_setfilter(capture_session, &arp_filter) == -1)
+    {
         printf("%s\n", pcap_geterr(capture_session));
         exit(1);
     }
@@ -85,6 +89,11 @@ void handle_packet (u_char *args, const struct pcap_pkthdr *header, const u_char
 void init_log_file(char* file)
 {
     log_file = fopen(file, "a");
+    if (log_file == NULL)
+    {
+      perror("Error while opening log file\n");
+      exit(1);
+    }
 }
 
 void start_capture ()

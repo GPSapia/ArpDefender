@@ -49,11 +49,11 @@ void get_mac_address(char* mac)
     strcat (file_name, "/address");
     FILE* mac_file = fopen(file_name, "r");
 
-    //implement the proper check
-    /*if (!mac_file)
-      printf("%s\n", "no file!");
-    else
-      printf("%s\n", "si file!");*/
+    if (mac_file == NULL)
+    {
+      perror("Error while opening mac file\n");
+      exit(1);
+    }
     fgets (tmp_mac_buffer, 18, mac_file);
 
     char* octet = strtok (tmp_mac_buffer, ":");
