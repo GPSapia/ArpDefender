@@ -15,12 +15,13 @@ void init_packet_fields()
   proto_length = 4;
   op_code[0] = 0x00;
   op_code[1] = 0x01;
+  get_mac_address(my_mac);
 }
 
 
 void construct_packet (uint8_t* target_ip_address)
 {
-    get_mac_address(my_mac);
+
     char type[2] = {0x08, 0x06};
 
     memset (request_packet, 0, 42);
@@ -39,8 +40,9 @@ void construct_packet (uint8_t* target_ip_address)
     memcpy (request_packet+38, target_ip_address, 4);           //target ip address
 }
 
-void send_packet()
+void send_packet(uint8_t* target_ip_address)
 {
+    construct_packet(target_ip_address);
     if (pcap_inject(capture_session, request_packet, 42) == -1)
       printf("%s\n", "errore");
 }

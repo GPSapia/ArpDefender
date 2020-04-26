@@ -7,6 +7,7 @@
 #include <stdbool.h>
 #include <pcap.h>
 #include <string.h>
+#include "arp_sender.h"
 
 char* nic;
 uint8_t local_if_address[4];
@@ -19,7 +20,10 @@ pcap_t* capture_session;
 
 struct bpf_program arp_filter;
 
-void init_pcap (char* requested_nic);
+FILE* log_file;
+
+void init_pcap (char* requested_nic, char* log_file);
+void init_log_file (char* log_file);
 void handle_packet(u_char *args, const struct pcap_pkthdr *header, const u_char *packet);
 void start_capture();
 void end_capture();

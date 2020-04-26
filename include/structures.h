@@ -12,6 +12,7 @@ struct arp_response {
   struct arp_response* next;
   uint8_t ip_address[4];
   uint8_t mac[ETHERNET_ADDRESS_LENGTH];
+  //lock (mutex)
 };
 
 struct request_item {

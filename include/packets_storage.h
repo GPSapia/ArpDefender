@@ -36,7 +36,13 @@ void add_host_request (uint8_t* ip_address);
 
 bool in_host_requests (uint8_t* ip_address);
 
-void delete_item (struct request_item**, uint8_t* ip_address);
+bool in_gratouitous_responses (uint8_t* ip_address, uint8_t* mac);
+
+bool mismatch_found (uint8_t* ip_address, uint8_t* mac, uint8_t* mismatching_mac);
+
+void delete_request_item (struct request_item**, uint8_t* ip_address);
+
+void delete_response_item (struct arp_response**, uint8_t* ip_address);
 
 void add_gratouitous_response (uint8_t* ip_address, uint8_t* mac);
 

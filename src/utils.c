@@ -67,13 +67,21 @@ void get_mac_address(char* mac)
 
 }
 
-
-
 bool compare_addresses (uint8_t* first_address, uint8_t* second_address)
 {
   for (size_t i = 0; i < 4; i++)
   {
       if (first_address[i] != second_address[i])
+        return false;
+  }
+  return true;
+}
+
+bool compare_mac (uint8_t* first_mac, uint8_t* second_mac)
+{
+  for (size_t i = 0; i < 6; i++)
+  {
+      if (first_mac[i] != second_mac[i])
         return false;
   }
   return true;

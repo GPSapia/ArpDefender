@@ -47,7 +47,6 @@ void add_gratouitous_response (uint8_t* ip_address, uint8_t* mac)
   current_last_response = new_response;
 }
 
-
 //
 //for debugging purposes
 //
@@ -100,7 +99,74 @@ bool in_host_requests (uint8_t* ip_address)
     return false;
 }
 
-void delete_item (struct request_item** item, uint8_t* ip_address)
+bool in_gratouitous_responses (uint8_t* ip_address, uint8_t* mac)
+{
+  struct arp_response* arp_item = gratouitous_arp;
+
+  while (arp_item)
+  {
+    if (compare_addresses (ip_address, arp_item->ip_address) && compare_mac(mac, arp_item->mac))
+      return true;
+    arp_item = arp_item->next;
+  }
+  return false;
+}
+
+bool mismatch_found (uint8_t* ip_address, uint8_t* mac, uint8_t* mismatching_mac)
+{
+  struct arp_response* arp_item = gratouitous_arp;
+
+  while (arp_item)
+  {
+    if (compare_addresses (ip_address, arp_item->ip_address))
+    {
+      if (!compare_mac(mac, arp_item->mac))
+      {
+        for (size_t i = 0; i < 6; i++)
+        mismatching_mac[i] = arp_item->mac[i];
+        delete_response_item(&gratouitous_arp, arp_item->ip_address);
+        return true;
+      }
+      else
+      {
+        delete_response_item(&gratouitous_arp, arp_item->ip_address);
+        return false;
+      }
+    }
+    arp_item = arp_item->next;
+  }
+  return false;
+}
+
+void delete_response_item (struct arp_response** item, uint8_t* ip_address)
+{
+  struct arp_response* tmp = *item;
+  struct arp_response* previous = NULL;
+
+  if (tmp != NULL && compare_addresses(tmp->ip_address, ip_address))
+  {
+      *item = tmp->next;
+      free (tmp);
+      if (*item == NULL) {
+        current_last_response = NULL;
+      }
+      return;
+  }
+
+  while (tmp != NULL && !compare_addresses(tmp->ip_address, ip_address))
+  {
+      previous = tmp;
+      tmp = tmp->next;
+  }
+
+  previous->next = tmp->next;
+  if (tmp->next == NULL)
+    current_last_response = previous;
+  free(tmp);
+  tmp = NULL;
+}
+
+void delete_request_item (struct request_item** item, uint8_t* ip_address)
 {
     struct request_item* tmp = *item;
     struct request_item* previous = NULL;
@@ -109,7 +175,8 @@ void delete_item (struct request_item** item, uint8_t* ip_address)
     {
         *item = tmp->next;
         free (tmp);
-        if (*item == NULL) {
+        if (*item == NULL)
+        {
           current_last_request = NULL;
         }
         return;

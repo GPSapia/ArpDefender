@@ -1,8 +1,6 @@
 #ifndef _ARPSENDER_H
 #define _ARPSENDER_H
 
-#include "structures.h"
-#include <string.h>
 #include "arp_capture.h"
 
 //
@@ -20,6 +18,6 @@ char op_code[2];
 
 void init_packet_fields();
 void construct_packet (uint8_t* target_ip_address);
-void send_packet();                                                             //every thread should call it
+void send_packet(uint8_t* target_ip_address);                                                             //every thread should call it
 
 #endif
