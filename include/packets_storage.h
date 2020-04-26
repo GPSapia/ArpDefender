@@ -29,9 +29,6 @@ void init_structures ();
 
 struct request_item* checker_requested_ip;
 
-void print_all_ips();                                                   //for debug
-void print_responses();
-
 void add_host_request (uint8_t* ip_address);
 
 bool in_host_requests (uint8_t* ip_address);

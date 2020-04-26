@@ -9,7 +9,6 @@ void init_structures ()
 
 void add_host_request (uint8_t* ip_address)
 {
-    printf("%s\n", "AGGIUNGO");
     struct request_item* new_request = (struct request_item*) malloc(sizeof(struct request_item));
     for (size_t i = 0; i < 4; i++)
       new_request->ip_address[i] = ip_address[i];
@@ -45,45 +44,6 @@ void add_gratouitous_response (uint8_t* ip_address, uint8_t* mac)
       gratouitous_arp = new_response;
   }
   current_last_response = new_response;
-}
-
-//
-//for debugging purposes
-//
-void print_all_ips ()
-{
-    struct request_item* rq_item = host_requested_ip;
-
-    while (rq_item)
-    {
-      for (size_t i = 0; i < 4; i++)
-        printf("%d.", rq_item->ip_address[i]);
-      rq_item = rq_item->next;
-      printf("%s\n", "");
-    }
-}
-
-//
-//for debugging purposes
-//
-void print_responses ()
-{
-    struct arp_response* rq_item = gratouitous_arp;
-
-    char macStr[18];
-
-    while (rq_item)
-    {
-      for (size_t i = 0; i < 4; i++)
-        printf("%d.", rq_item->ip_address[i]);
-      printf("%s\n", "");
-
-
-      printf("%02X:%02X\n", rq_item->mac[0], rq_item->mac[1]);
-
-      rq_item = rq_item->next;
-      printf("%s\n", "");
-    }
 }
 
 bool in_host_requests (uint8_t* ip_address)
