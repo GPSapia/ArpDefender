@@ -65,6 +65,7 @@ void get_mac_address(char* mac)
         i++;
     }
 
+    fclose(mac_file);
 }
 
 bool compare_addresses (uint8_t* first_address, uint8_t* second_address)

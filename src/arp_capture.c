@@ -65,7 +65,13 @@ void handle_packet (u_char *args, const struct pcap_pkthdr *header, const u_char
       }
       else if (mismatch_found(pckt->sender_ip_address, pckt->sender_mac_address, mismatching_mac))
       {
-        fprintf(log_file, "found mismatch for ip: %d.%d.%d.%d\tmac1 is: %02x:%02x:%02x:%02x:%02x:%02x\tmac2 is: %02x:%02x:%02x:%02x:%02x:%02x\n",
+        FILE* log = fopen (log_file, "a");
+        if (log_file == NULL)
+        {
+          perror("Error while opening log file\n");
+          exit(1);
+        }
+        fprintf(log, "found mismatch for ip: %d.%d.%d.%d\tmac1 is: %02x:%02x:%02x:%02x:%02x:%02x\tmac2 is: %02x:%02x:%02x:%02x:%02x:%02x\n",
                                                                                                                           pckt->sender_ip_address[0], pckt->sender_ip_address[1],
                                                                                                                           pckt->sender_ip_address[2], pckt->sender_ip_address[3],
                                                                                                                           pckt->sender_mac_address[0], pckt->sender_mac_address[1],
@@ -74,6 +80,7 @@ void handle_packet (u_char *args, const struct pcap_pkthdr *header, const u_char
                                                                                                                           mismatching_mac[0], mismatching_mac[1],
                                                                                                                           mismatching_mac[2], mismatching_mac[3],
                                                                                                                           mismatching_mac[4], mismatching_mac[5]);
+        fclose (log);
       }
       else
       {
@@ -88,12 +95,7 @@ void handle_packet (u_char *args, const struct pcap_pkthdr *header, const u_char
 
 void init_log_file(char* file)
 {
-    log_file = fopen(file, "a");
-    if (log_file == NULL)
-    {
-      perror("Error while opening log file\n");
-      exit(1);
-    }
+    log_file = file;
 }
 
 void start_capture ()

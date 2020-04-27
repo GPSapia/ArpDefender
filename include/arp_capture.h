@@ -20,7 +20,7 @@ pcap_t* capture_session;
 
 struct bpf_program arp_filter;
 
-FILE* log_file;
+char* log_file;
 
 void init_pcap (char* requested_nic, char* log_file);
 void init_log_file (char* log_file);

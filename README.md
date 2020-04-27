@@ -8,3 +8,5 @@ To be compiled (only on Linux) with -lpcap option.
 Usage  ----->  2 options need to be specified:
   1) name of the interface on which start the capture of ARP packets
   2) name of the log file
+
+In the log file, "mac1" is the mac of the legitimate host, while "mac2" is the mac of the (potential) attacker.
