@@ -106,4 +106,5 @@ void start_capture ()
 void end_capture ()
 {
     free_requests();
+    pcap_close(capture_session);
 }
